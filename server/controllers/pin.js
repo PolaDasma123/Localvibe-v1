@@ -28,7 +28,7 @@ const Pin = require("../models/PinModel");
       if (image) {
         myCloud = await cloudinary.v2.uploader.upload(image, {
           folder: "pins",
-        });
+        });`
       }
 
       const pin = new Pin({
