@@ -1,3 +1,4 @@
+const Pin = require("../models/PinModel");
   const ErrorHandler = require("../utils/ErrorHandler.js");
   const catchAsyncErrors = require("../middleware/catchAsyncErrors");
   const cloudinary = require("cloudinary");
