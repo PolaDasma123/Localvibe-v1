@@ -151,12 +151,11 @@ exports.deletePinById = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-// Add a review to a pin
 exports.addReview = catchAsyncErrors(async (req, res, next) => {
   try {
-    const { pinId, userId, name, image, reviewText, ratings } = req.body;
+    const { pinId, review } = req.body; // ✅ Extract review object
 
-    if (!pinId || !userId || !reviewText || !ratings || !name || !image) {
+    if (!pinId || !review || !review.user || !review.reviewText || !review.ratings) {
       return next(new ErrorHandler("All fields are required", 400));
     }
 
@@ -166,18 +165,7 @@ exports.addReview = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Pin not found", 404));
     }
 
-    // Structure the review to match the schema with nested user object
-    const review = {
-      user: {
-        _id: userId,
-        name: name,
-        image: image
-      },
-      reviewText,
-      ratings,
-      createdAt: new Date()
-    };
-
+    // ✅ Use structured review object
     pin.reviews.push(review);
     pin.reviewCount = pin.reviews.length;
 
@@ -186,11 +174,7 @@ exports.addReview = catchAsyncErrors(async (req, res, next) => {
     pin.averageRating = totalRatings / pin.reviewCount;
 
     // Check if the pin qualifies for verification
-    if (pin.reviewCount >= 10 && pin.averageRating >= 4.5) {
-      pin.isVerified = true;
-    } else {
-      pin.isVerified = false;
-    }
+    pin.isVerified = pin.reviewCount >= 10 && pin.averageRating >= 4.5;
 
     await pin.save();
 
@@ -203,6 +187,7 @@ exports.addReview = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 400));
   }
 });
+
 
 
 // Modify a review
