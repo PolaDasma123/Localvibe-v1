@@ -70,19 +70,19 @@ const pinSchema = new mongoose.Schema(
     reviews: [
       {
         pinId: {
-          type: String, // Changed from ObjectId to String
+          type: String,
           required: true,
         },
         userId: {
-          type: String, // Changed from ObjectId to String
+          type: String,
           required: true,
         },
         name: {
-          type: String,
+          type: String, // ✅ Now a direct field, not inside `user`
           required: true,
         },
         image: {
-          type: String,
+          type: String, // ✅ Now a direct field, not inside `user`
           required: true,
         },
         reviewText: {
@@ -111,7 +111,7 @@ const pinSchema = new mongoose.Schema(
       sunday: { open: String, close: String },
     },
     visitors: {
-      type: [String], // Store user IDs as strings
+      type: [String],
       default: [],
     },
   },
