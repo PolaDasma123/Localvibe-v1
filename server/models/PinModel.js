@@ -70,13 +70,11 @@ const pinSchema = new mongoose.Schema(
     reviews: [
       {
         pinId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Pin",
+          type: String, // Changed from ObjectId to String
           required: true,
         },
         userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
+          type: String, // Changed from ObjectId to String
           required: true,
         },
         name: {
