@@ -154,10 +154,9 @@ exports.deletePinById = catchAsyncErrors(async (req, res, next) => {
 // Add a review to a pin
 exports.addReview = catchAsyncErrors(async (req, res, next) => {
   try {
-    const { pinId, reviewText, ratings, name, image } = req.body;
-    const userId = req.user._id;  // Getting userId from authenticated user
+    const { pinId, userId, name, image, reviewText, ratings } = req.body;
 
-    if (!pinId || !reviewText || !ratings || !name || !image) {
+    if (!pinId || !userId || !reviewText || !ratings || !name || !image) {
       return next(new ErrorHandler("All fields are required", 400));
     }
 
@@ -167,11 +166,10 @@ exports.addReview = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Pin not found", 404));
     }
 
-    // Create review object matching the new schema structure
     const review = {
-      userId: userId,  // Changed from user._id
-      name: name,      // Moved to top level
-      image: image,    // Moved to top level
+      userId,
+      name,
+      image,
       reviewText,
       ratings,
       createdAt: new Date()
