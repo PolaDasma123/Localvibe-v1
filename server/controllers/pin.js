@@ -156,7 +156,7 @@ exports.addReview = catchAsyncErrors(async (req, res, next) => {
   try {
     const { pinId, userId, name, image, reviewText, ratings } = req.body;
 
-    if (!pinId || !userId || !reviewText || !ratings || !name || !image) {
+    if (!pinId || !userId || !name || !image || !reviewText || !ratings) {
       return next(new ErrorHandler("All fields are required", 400));
     }
 
@@ -167,13 +167,13 @@ exports.addReview = catchAsyncErrors(async (req, res, next) => {
 
     const review = {
       user: {
-        _id: userId,
-        name: name,
-        image: image
+        _id: userId, // Matches createdBy format in createPinAction
+        name,
+        image,
       },
       reviewText,
       ratings,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
     pin.reviews.push(review);
@@ -182,8 +182,6 @@ exports.addReview = catchAsyncErrors(async (req, res, next) => {
     // Update average rating
     const totalRatings = pin.reviews.reduce((sum, rev) => sum + rev.ratings, 0);
     pin.averageRating = totalRatings / pin.reviewCount;
-
-    pin.isVerified = pin.reviewCount >= 10 && pin.averageRating >= 4.5;
 
     await pin.save();
 
@@ -196,6 +194,7 @@ exports.addReview = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 400));
   }
 });
+
 
 
 
