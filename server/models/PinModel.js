@@ -69,18 +69,20 @@ const pinSchema = new mongoose.Schema(
     },
     reviews: [
       {
-        userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-          required: true
-        },
-        name: {
-          type: String,
-          required: true
-        },
-        image: {
-          type: String,
-          required: true
+        user: {
+          _id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
+          },
+          name: {
+            type: String,
+            required: true
+          },
+          image: {
+            type: String,
+            required: true
+          }
         },
         reviewText: {
           type: String,
