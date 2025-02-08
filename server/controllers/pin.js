@@ -166,10 +166,13 @@ exports.addReview = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Pin not found", 404));
     }
 
+    // Structure the review to match the schema with nested user object
     const review = {
-      userId,
-      name,
-      image,
+      user: {
+        _id: userId,
+        name: name,
+        image: image
+      },
       reviewText,
       ratings,
       createdAt: new Date()
