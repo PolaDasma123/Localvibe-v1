@@ -156,33 +156,35 @@ exports.addReview = catchAsyncErrors(async (req, res, next) => {
   try {
     const { pinId, userId, name, image, reviewText, ratings } = req.body;
 
+    // Validate required fields
     if (!pinId || !userId || !name || !image || !reviewText || !ratings) {
       return next(new ErrorHandler("All fields are required", 400));
     }
 
+    // Find the pin to add the review
     const pin = await Pin.findById(pinId);
     if (!pin) {
       return next(new ErrorHandler("Pin not found", 404));
     }
 
-    const review = {
+    // Push new review
+    pin.reviews.push({
       user: {
-        _id: userId, // Matches createdBy format in createPinAction
-        name,
-        image,
+        _id: userId,
+        name: name,
+        image: image
       },
-      reviewText,
-      ratings,
-      createdAt: new Date(),
-    };
+      reviewText: reviewText,
+      ratings: ratings,
+      createdAt: new Date()
+    });
 
-    pin.reviews.push(review);
+    // Update review count and average rating
     pin.reviewCount = pin.reviews.length;
-
-    // Update average rating
     const totalRatings = pin.reviews.reduce((sum, rev) => sum + rev.ratings, 0);
     pin.averageRating = totalRatings / pin.reviewCount;
 
+    // Save changes
     await pin.save();
 
     res.status(201).json({
@@ -190,14 +192,11 @@ exports.addReview = catchAsyncErrors(async (req, res, next) => {
       message: "Review added successfully",
       pin,
     });
+
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }
 });
-
-
-
-
 
 // Modify a review
 exports.modifyReview = catchAsyncErrors(async (req, res, next) => {
