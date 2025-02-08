@@ -69,16 +69,16 @@ const pinSchema = new mongoose.Schema(
     },
     reviews: [
       {
-        userId: {  // Changed from user._id to userId
+        userId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
           required: true
         },
-        name: {  // Moved from user.name to top level
+        name: {
           type: String,
           required: true
         },
-        image: {  // Moved from user.image to top level
+        image: {
           type: String,
           required: true
         },
