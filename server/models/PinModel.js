@@ -67,39 +67,39 @@ const pinSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
-    reviews: [
-      {
-        user: {
-          _id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            required: true
-          },
-          name: {
-            type: String,
-            required: true
-          },
-          image: {
-            type: String,
-            required: true
-          }
-        },
-        reviewText: {
-          type: String,
-          required: true,
-        },
-        ratings: {
-          type: Number,
-          required: true,
-          min: 1,
-          max: 5,
-        },
-        createdAt: {
-          type: Date,
-          default: Date.now,
-        },
+reviews: [
+  {
+    user: {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
       },
-    ],
+      name: {
+        type: String,
+        required: true
+      },
+      image: {
+        type: String,
+        required: true
+      }
+    },
+    reviewText: {
+      type: String,
+      required: true,
+    },
+    ratings: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 5,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+],
     operatingHours: {
       monday: { open: String, close: String },
       tuesday: { open: String, close: String },
